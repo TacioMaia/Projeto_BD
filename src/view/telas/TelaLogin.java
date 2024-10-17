@@ -4,6 +4,7 @@
  */
 package view.telas;
 
+import java.awt.Color;
 import java.sql.*;
 import javax.swing.JOptionPane;
 import view.dal.ModuloConexao;
@@ -30,16 +31,31 @@ public class TelaLogin extends javax.swing.JFrame {
 
             // se o usuaruio e senha existirem
             if (rs.next()) {
-                TelaPrincipal principal = new TelaPrincipal();
-                principal.setVisible(true);
+                // a linha abaixo obtem o conteudo do campo perfil, ve se é normal ou adm
+                String perfil = rs.getString(5);
+                // a estrutura abaixo faz o tratamento do perfil do usuario
+                if (perfil.equals("adm")) {
 
+                    // a linha abaixo exibe o conteudo do campo da tabela
+                    TelaPrincipal principal = new TelaPrincipal();
+                    principal.setVisible(true);
+                    TelaPrincipal.MenuUsuarioCad.setEnabled(true);
+                    TelaPrincipal.lblUsuario.setText(rs.getString(2));
+                    TelaPrincipal.lblUsuario.setForeground(Color.blue);
+                    this.dispose();                 
+                }else{
+                    TelaPrincipal principal = new TelaPrincipal();
+                    principal.setVisible(true);
+                    TelaPrincipal.lblUsuario.setText(rs.getString(2));
+                    this.dispose();
+                }
+                
             } else {
                 JOptionPane.showMessageDialog(null, "usuario e/ou senha inválido(s)");
             }
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
-           
         }
     }
 
